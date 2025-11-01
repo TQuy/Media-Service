@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ComputingController } from './services/computing/fibonacci.controller';
+import { ComputingController } from './controllers/computing/fibonacci.controller';
 
 @Module({
   imports: [],
