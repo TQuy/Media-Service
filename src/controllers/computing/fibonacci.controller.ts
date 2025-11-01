@@ -11,11 +11,13 @@ import {
   ApiOkResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { getFibonacciNumber } from '../../utils/fibonacci';
+import { FibonacciService } from '@/services/computing/fibonacci';
 
 @ApiTags('computing')
 @Controller('computing')
 export class ComputingController {
+  constructor(private readonly fibonacciService: FibonacciService) {}
+
   @Get('fibonacci')
   @ApiQuery({
     name: 'n',
@@ -27,9 +29,9 @@ export class ComputingController {
     schema: { example: { input: 10, result: 55 } },
   })
   @ApiBadRequestResponse({ description: 'Invalid input' })
-  getFibonacci(@Query('n', ParseIntPipe) n: number) {
+  async getFibonacci(@Query('n', ParseIntPipe) n: number) {
     try {
-      const result = getFibonacciNumber(n);
+      const result = await this.fibonacciService.getFibonacciNumber(n);
       return { input: n, result };
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Invalid input';

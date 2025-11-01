@@ -6,7 +6,7 @@
  * Time complexity: O(n)
  * Space complexity: O(1)
  */
-export function getFibonacciNumber(n: number): number {
+export function calculateFibonacciNumber(n: number): number {
   if (!Number.isInteger(n)) {
     throw new Error('n must be an integer');
   }
