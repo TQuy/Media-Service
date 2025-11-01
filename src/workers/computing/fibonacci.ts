@@ -1,7 +1,7 @@
-// src/workers/computing/fibonacci.ts
+import 'module-alias/register';
 import { parentPort } from 'worker_threads';
 import { WorkerResponse } from '@/types';
-import { calculateFibonacciNumber } from '../../utils/fibonacci';
+import { calculateFibonacciNumber } from '@/utils/fibonacci';
 
 if (!parentPort) {
   throw new Error('This module must be run as a Worker thread');
