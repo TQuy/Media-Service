@@ -71,3 +71,4 @@ If any section is unclear or missing, please provide feedback to improve these i
 ## Coding Style
 - Use functional programming if possible, but can switch to hybrid approach between OOP and functional programming if closure is hard to comprehend, and having a explicit state is better.
 - We will try to split code into three layers: `Controller`, `Service` and finally `Utility`. The `Utility` layer hold the re-usable, pure functions such as function to calculate fibonacci number.
+- Don't update the path alias `@/*` to `../*` in files that are not test files

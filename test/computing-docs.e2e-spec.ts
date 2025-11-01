@@ -1,8 +1,8 @@
+import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import request from 'supertest';
-import { AppModule } from '../src/app.module';
+import { AppModule } from '@/app.module';
 
 describe('Swagger Docs (e2e)', () => {
   let app: INestApplication;
