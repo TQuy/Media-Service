@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { join } from 'path';
 import { Worker } from 'worker_threads';
 import { WorkerResponse } from '../../types';
 
@@ -12,8 +11,8 @@ export class FibonacciService {
         process.env.NODE_ENV === 'test' ||
         process.env.JEST_WORKER_ID !== undefined;
       const workerPath = isTest
-        ? join(__dirname, '../../workers/computing/fibonacci.ts')
-        : join(__dirname, '../../workers/computing/fibonacci.js');
+        ? './src/workers/computing/fibonacci.ts'
+        : './workers/computing/fibonacci.js';
 
       const worker = new Worker(workerPath, {
         ...(isTest && {
