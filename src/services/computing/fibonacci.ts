@@ -1,22 +1,61 @@
-import { Injectable } from '@nestjs/common';
 import { Worker } from 'worker_threads';
-import { WorkerResponse } from '../../types';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WorkerResponse } from '@/types';
+import { FIBONACCI_EVENT_NAME, QUEUE_MODULE_NAME } from '@/constants';
+import { ClientProxy } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class FibonacciService {
+  private logger: Logger;
+  constructor(
+    @Inject(QUEUE_MODULE_NAME) private readonly queueClient: ClientProxy,
+  ) {
+    this.logger = new Logger(FibonacciService.name);
+  }
+
+  /**
+   * This method now *schedules* a fibonacci job by sending
+   * it to the queue instead of calculating it directly.
+   */
+  scheduleFibonacciJob(number: number) {
+    const payload = { number: number, scheduledAt: new Date() };
+
+    this.logger.log(
+      `Sending job to 'fibonacci_jobs_queue' with payload: ${JSON.stringify(payload)}`,
+    );
+
+    // 'emit' sends an event (fire-and-forget, no response expected)
+    // Use 'send' if you need to wait for a response from the worker.
+    this.queueClient.emit(FIBONACCI_EVENT_NAME, payload);
+    // The first argument 'fibonacci_job_event' is the *event pattern*
+    // or *message name* that a worker will listen for.
+
+    return { message: `Fibonacci job for ${number} has been scheduled.` };
+  }
+
+  /** Calculates the nth Fibonacci number using a Web Worker for non-blocking computation. */
   getFibonacciNumber(n: number): Promise<number> {
     return new Promise((resolve, reject) => {
       // Determine worker path based on environment
+      const configService = new ConfigService();
       const isTest =
-        process.env.NODE_ENV === 'test' ||
-        process.env.JEST_WORKER_ID !== undefined;
-      const workerPath = isTest
-        ? './src/workers/computing/fibonacci.ts'
-        : './workers/computing/fibonacci.js';
+        configService.get<string>('NODE_ENV') === 'test' ||
+        configService.get<string>('JEST_WORKER_ID') !== undefined;
+      const isDev = configService.get<string>('NODE_ENV') === 'development';
+      const workerPath =
+        isTest || isDev
+          ? './src/workers/computing/fibonacci.ts'
+          : './workers/computing/fibonacci.js';
 
       const worker = new Worker(workerPath, {
-        ...(isTest && {
-          execArgv: ['--require', 'ts-node/register'],
+        ...((isTest || isDev) && {
+          execArgv: [
+            '--require',
+            'ts-node/register',
+            '--require',
+            'tsconfig-paths/register',
+          ],
         }),
       });
 

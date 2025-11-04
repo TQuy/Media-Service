@@ -4,6 +4,8 @@ import {
   Query,
   ParseIntPipe,
   BadRequestException,
+  Body,
+  Post,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -12,12 +14,30 @@ import {
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { FibonacciService } from '@/services/computing/fibonacci';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, Min } from 'class-validator';
+
+export class ScheduleJobDto {
+  @ApiProperty({ description: 'Fibonacci number to calculate', minimum: 0 })
+  @IsNumber()
+  @Min(0)
+  number: number;
+}
 
 @ApiTags('computing')
 @Controller('computing')
 export class ComputingController {
   constructor(private readonly fibonacciService: FibonacciService) {}
 
+  /** Schedules a Fibonacci job */
+  @Post('fibonacci')
+  scheduleJob(@Body() body: ScheduleJobDto) {
+    // You would add more robust validation here
+    const numberToCalculate = body.number;
+    return this.fibonacciService.scheduleFibonacciJob(numberToCalculate);
+  }
+
+  /** Calculates the nth Fibonacci number using a Web Worker for non-blocking computation. */
   @Get('fibonacci')
   @ApiQuery({
     name: 'n',

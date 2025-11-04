@@ -1,4 +1,9 @@
-import 'module-alias/register';
+// Only import module-alias in production mode
+if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('module-alias/register');
+}
+
 import { parentPort } from 'worker_threads';
 import { WorkerResponse } from '@/types';
 import { calculateFibonacciNumber } from '@/utils/fibonacci';
