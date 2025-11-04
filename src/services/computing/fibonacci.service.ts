@@ -45,8 +45,8 @@ export class FibonacciService {
       const isDev = configService.get<string>('NODE_ENV') === 'development';
       const workerPath =
         isTest || isDev
-          ? './src/workers/computing/fibonacci.ts'
-          : './workers/computing/fibonacci.js';
+          ? './src/workers/computing/fibonacci.workerThread.ts'
+          : './workers/computing/fibonacci.workerThread.js';
 
       const worker = new Worker(workerPath, {
         ...((isTest || isDev) && {

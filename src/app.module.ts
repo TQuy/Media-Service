@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from '@/app.controller';
 import { AppService } from '@/app.service';
 import { ComputingController } from '@/controllers/computing/fibonacci.controller';
-import { FibonacciService } from '@/services/computing/fibonacci';
+import { FibonacciService } from '@/services/computing/fibonacci.service';
 
 // 1. Import the necessary modules from @nestjs/microservices
 import { ClientsModule, Transport } from '@nestjs/microservices';

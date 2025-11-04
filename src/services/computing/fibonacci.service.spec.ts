@@ -1,5 +1,5 @@
 import { ClientProxy } from '@nestjs/microservices';
-import { FibonacciService } from './fibonacci';
+import { FibonacciService } from './fibonacci.service';
 import { FIBONACCI_EVENT_NAME } from '@/constants';
 
 describe('FibonacciService', () => {

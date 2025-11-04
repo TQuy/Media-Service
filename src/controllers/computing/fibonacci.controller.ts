@@ -13,7 +13,7 @@ import {
   ApiOkResponse,
   ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { FibonacciService } from '@/services/computing/fibonacci';
+import { FibonacciService } from '@/services/computing/fibonacci.service';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, Min } from 'class-validator';
 
